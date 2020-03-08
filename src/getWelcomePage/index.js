@@ -1,17 +1,20 @@
-const fs = require('fs');
-exports.handler = async event => {
-  // Log http request
-  console.log(event);
+const Maxmind = require('maxmind')
 
-  const responseBody = fs.readFileSync('./welcome.html', 'utf8');
-  // Build an HTTP response.
+let ipDB;
+
+exports.handler = async event => {
+  if (!ipDB) {
+    ipDB = await Maxmind.open('./data/GeoLite2-City.mmdb')
+  }
+  const responseBody = ipDB.get(event.ip)
+
   const response = {
     statusCode: 200,
     headers: {
-      'Content-Type': 'text/html'
+      'Content-Type': 'application/json'
     },
     body: responseBody
-  };
+  }
 
-  return response;
-};
+  return response
+}
