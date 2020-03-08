@@ -13,22 +13,22 @@ Resources:
         swagger: '2.0'
         info: {}
         paths:
-          /:
+          /lookup:
             get:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getWelcomePage.Arn}/invocations
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lookup.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
-  getWelcomePage:
+  lookup:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-getWelcomePage
+      FunctionName: !Sub ${AWS::StackName}-lookup
       Description: !Sub
         - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: getWelcomePage
-      CodeUri: src/getWelcomePage
+        - ResourceName: lookup
+      CodeUri: src/lookup
       Handler: index.handler
       Runtime: nodejs10.x
       MemorySize: 3008
@@ -37,14 +37,14 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
       Events:
-        apiGET:
+        apiGETlookup:
           Type: Api
           Properties:
-            Path: /
+            Path: /lookup
             Method: GET
             RestApiId: !Ref api
     Metadata:
-      StackeryName: getWelcomePage
+      StackeryName: lookup
 Parameters:
   StackeryStackTagName:
     Type: String
