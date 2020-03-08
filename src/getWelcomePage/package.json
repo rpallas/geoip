@@ -1,4 +1,5 @@
 {
+  "name": "get-welcome-page",
   "private": true,
   "dependencies": {
     "aws-sdk": "~2"
