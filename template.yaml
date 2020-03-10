@@ -30,9 +30,9 @@ Resources:
         - ResourceName: lookup
       CodeUri: src/lookup
       Handler: index.handler
-      Runtime: nodejs10.x
-      MemorySize: 3008
-      Timeout: 30
+      Runtime: nodejs12.x
+      MemorySize: 1024
+      Timeout: 15
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
