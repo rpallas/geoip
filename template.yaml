@@ -36,6 +36,8 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+        - S3CrudPolicy:
+            BucketName: !Ref geoipdata
       Events:
         apiGETlookup:
           Type: Api
@@ -43,8 +45,16 @@ Resources:
             Path: /lookup
             Method: GET
             RestApiId: !Ref api
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref geoipdata
+          BUCKET_ARN: !GetAtt geoipdata.Arn
     Metadata:
       StackeryName: lookup
+  geoipdata:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-geoipdata-${AWS::AccountId}
 Parameters:
   StackeryStackTagName:
     Type: String
