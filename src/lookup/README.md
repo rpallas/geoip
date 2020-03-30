@@ -1,5 +1,5 @@
 Geo-IP Lookup via Maxmind
 
-## Usage
+## Development
 
-    stackery invoke -e env --aws-profile profile --input '{ "ip": "1.1.1.1" }'
+    stackery [local] invoke -e <env> --aws-profile <profile> --input '{ "ip": "1.1.1.1" }'
