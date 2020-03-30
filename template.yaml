@@ -43,8 +43,23 @@ Resources:
             Path: /lookup
             Method: GET
             RestApiId: !Ref api
+      Layers:
+        - !Ref GeoIPDataLambdaLayer
     Metadata:
       StackeryName: lookup
+  GeoIPDataLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: GeoIPDataLambdaLayer
+      Description: Geo IP Data Lambda Layer containing free maxmind database
+      ContentUri: lambda-layers/geoip-data.zip
+      CompatibleRuntimes:
+        - python3.6
+        - python3.7
+        - nodejs12.x
+        - nodejs10.x
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
 Parameters:
   StackeryStackTagName:
     Type: String
