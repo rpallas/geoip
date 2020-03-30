@@ -4,7 +4,7 @@ let ipDB;
 
 exports.handler = async event => {
   if (!ipDB) {
-    ipDB = await Maxmind.open('./data/GeoLite2-City.mmdb')
+    ipDB = await Maxmind.open('/opt/ipdata/GeoLite2-City.mmdb')
   }
   const responseBody = ipDB.get(event.ip)
 
