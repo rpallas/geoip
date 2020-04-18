@@ -52,7 +52,7 @@ Resources:
     Properties:
       LayerName: GeoIPDataLambdaLayer
       Description: Geo IP Data Lambda Layer containing free maxmind database
-      ContentUri: src/geoIPDataLambdaLayer
+      ContentUri: s3://geoip-ip-data-layer/geoIPDataLambdaLayer.zip
       CompatibleRuntimes:
         - python3.6
         - python3.7
