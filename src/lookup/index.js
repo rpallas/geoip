@@ -5,9 +5,9 @@ const dirTree = require("directory-tree");
 let ipDB;
 
 exports.handler = async event => {
-  const tree = dirTree(".");
-  console.log(`current directory tree: ${JSON.stringify(tree)}`)
-  
+  const optTree = dirTree("/opt");
+  console.log(`opt directory tree: ${JSON.stringify(optTree)}`)
+
   if (!ipDB) {
     ipDB = await Maxmind.open('/opt/ipdata/GeoLite2-City.mmdb')
   }
