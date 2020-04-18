@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "~2",
+    "directory-tree": "^2.2.4",
     "maxmind": "^4.1.0"
   }
 }
