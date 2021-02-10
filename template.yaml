@@ -36,6 +36,8 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+        - S3CrudPolicy:
+            BucketName: !Ref ipdata
       Events:
         apiGETlookup:
           Type: Api
@@ -43,8 +45,44 @@ Resources:
             Path: /lookup
             Method: GET
             RestApiId: !Ref api
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ipdata
+          BUCKET_ARN: !GetAtt ipdata.Arn
     Metadata:
       StackeryName: lookup
+  updateIPData:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-updateIPData
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: updateIPData
+      CodeUri: src/updateIPData
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 1024
+      Timeout: 600
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - S3CrudPolicy:
+            BucketName: !Ref ipdata
+      Events:
+        Timer:
+          Type: Schedule
+          Properties:
+            Schedule: cron(30 9 * * MON)
+          Metadata:
+            StackeryName: updateIPDataSchedule
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ipdata
+          BUCKET_ARN: !GetAtt ipdata.Arn
+  ipdata:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-ipdata-${AWS::AccountId}
 Parameters:
   StackeryStackTagName:
     Type: String
@@ -55,3 +93,9 @@ Parameters:
   StackeryEnvironmentAPIGatewayStageName:
     Type: String
     Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
+  StackTagName:
+    Type: String
+    Description: Stack Name (injected by Stackery at deployment time)
+  EnvironmentTagName:
+    Type: String
+    Description: Environment Name (injected by Stackery at deployment time)
